@@ -3,33 +3,15 @@ using System.Text.Json.Serialization;
 namespace Telebot;
 
 /// <summary>
-/// Настройки генерации превью ссылок для отправляемого сообщения
-/// (см. <see href="https://core.telegram.org/bots/api#linkpreviewoptions"/>).
+/// Настройки превью ссылок в сообщении
+/// (<see href="https://core.telegram.org/bots/api#linkpreviewoptions"/>).
+/// Заменяет устаревший <c>disable_web_page_preview</c>.
 /// </summary>
-/// <remarks>
-/// В Telegram Bot API этот объект передаётся как JSON-строка в поле формы
-/// <c>link_preview_options</c> — сериализацию выполняет вызывающий запрос
-/// (см. <see cref="SendMessageRequestParams.GetRequestFields"/>). Пришёл
-/// на смену устаревшему <c>disable_web_page_preview</c> в Bot API 7.0.
-/// </remarks>
-/// <param name="IsDisabled">
-/// Если <c>true</c>, превью ссылок в сообщении полностью отключено.
-/// </param>
-/// <param name="Url">
-/// URL, для которого нужно построить превью. Если не задан — берётся
-/// первая ссылка из текста сообщения.
-/// </param>
-/// <param name="PreferSmallMedia">
-/// Если <c>true</c>, превью будет уменьшенным. Игнорируется, если для
-/// выбранного URL медиа не может быть уменьшено.
-/// </param>
-/// <param name="PreferLargeMedia">
-/// Если <c>true</c>, превью будет увеличенным. Игнорируется, если для
-/// выбранного URL медиа не может быть увеличено.
-/// </param>
-/// <param name="ShowAboveText">
-/// Если <c>true</c>, превью показывается над текстом сообщения; иначе — под ним.
-/// </param>
+/// <param name="IsDisabled">Полностью отключить превью ссылок.</param>
+/// <param name="Url">URL для превью. По умолчанию — первая ссылка из текста.</param>
+/// <param name="PreferSmallMedia">Уменьшенное превью (игнорируется, если недоступно).</param>
+/// <param name="PreferLargeMedia">Увеличенное превью (игнорируется, если недоступно).</param>
+/// <param name="ShowAboveText">Показать превью над текстом сообщения.</param>
 public sealed record LinkPreviewOptions(
     [property: JsonPropertyName("is_disabled")]
     bool? IsDisabled = null,

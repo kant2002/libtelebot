@@ -3,34 +3,17 @@ using System.Text.Json;
 namespace Telebot;
 
 /// <summary>
-/// Параметры вызова метода <c>setWebhook</c> — регистрация webhook-URL,
-/// на который Telegram будет POST-ить апдейты вместо ожидания long-polling.
+/// Параметры <c>setWebhook</c> — регистрация URL для доставки апдейтов.
 /// </summary>
-/// <param name="Url">HTTPS-URL, на который Telegram отправит апдейты. Обязательное поле.</param>
-/// <param name="Certificate">
-/// Самоподписанный публичный сертификат сервера. Передаётся только как поток,
-/// поскольку Telegram должен получить непосредственно содержимое PEM-файла —
-/// именно поэтому тип сужен до <see cref="InputFileWithStream"/>.
-/// </param>
-/// <param name="IpAddress">
-/// Фиксированный IP, на который Telegram будет резолвить <see cref="Url"/>
-/// — помогает обойти проблемы с DNS.
-/// </param>
-/// <param name="MaxConnections">
-/// Максимум одновременных HTTPS-соединений для доставки апдейтов (1–100,
-/// по умолчанию 40). Меньшее значение снижает нагрузку на сервер.
-/// </param>
-/// <param name="AllowedUpdates">
-/// Список интересующих типов апдейтов; сериализуется в JSON-массив.
-/// </param>
-/// <param name="DropPendingUpdates">
-/// Если <c>true</c>, Telegram сбросит все накопленные, но ещё не доставленные
-/// апдейты — полезно при перезапуске бота с чистого листа.
-/// </param>
+/// <param name="Url">HTTPS-URL для приёма апдейтов.</param>
+/// <param name="Certificate">Самоподписанный публичный сертификат сервера (только как поток).</param>
+/// <param name="IpAddress">Фиксированный IP для резолвинга <see cref="Url"/> — в обход DNS.</param>
+/// <param name="MaxConnections">Максимум одновременных HTTPS-соединений (1–100, по умолчанию 40).</param>
+/// <param name="AllowedUpdates">Список интересующих типов апдейтов.</param>
+/// <param name="DropPendingUpdates">Сбросить накопленные, но не доставленные апдейты.</param>
 /// <param name="SecretToken">
-/// Произвольная строка, которую Telegram будет присылать в заголовке
-/// <c>X-Telegram-Bot-Api-Secret-Token</c> — простой способ проверить,
-/// что входящий запрос действительно от Telegram, а не от стороннего источника.
+/// Секрет, который Telegram будет присылать в <c>X-Telegram-Bot-Api-Secret-Token</c>
+/// — для проверки, что запрос действительно от Telegram.
 /// </param>
 public sealed record SetWebhookRequestParams(
     string Url,
@@ -42,10 +25,7 @@ public sealed record SetWebhookRequestParams(
     string? SecretToken = null
 ) : TelegramRequest("setWebhook")
 {
-    /// <summary>
-    /// Возвращает скалярные поля webhook'а. <see cref="Certificate"/>
-    /// сюда не попадает — это файл, он отдаётся через <see cref="GetRequestFiles"/>.
-    /// </summary>
+    /// <inheritdoc />
     public override IEnumerable<TelegramRequestField> GetRequestFields()
     {
         yield return new TelegramRequestField("url", Url);
@@ -75,11 +55,7 @@ public sealed record SetWebhookRequestParams(
             yield return new TelegramRequestField("secret_token", SecretToken);
     }
 
-    /// <summary>
-    /// Возвращает сертификат как файл с именем поля <c>certificate</c>,
-    /// только если он задан. Наличие потока в файлах автоматически
-    /// заставит транспорт использовать multipart/form-data.
-    /// </summary>
+    /// <inheritdoc />
     public override IEnumerable<TelegramRequestFile> GetRequestFiles()
     {
         if (Certificate is not null)
