@@ -3,89 +3,29 @@ using System.Text.Json.Serialization;
 namespace Telebot.Models;
 
 /// <summary>
-/// Представляет сообщение в Telegram
-/// (см. <see href="https://core.telegram.org/bots/api#message"/>).
+/// Сообщение в Telegram (<see href="https://core.telegram.org/bots/api#message"/>).
 /// </summary>
 /// <remarks>
-/// Сообщение — основная единица содержимого, которой обмениваются пользователи
-/// и боты. Объект имеет много необязательных полей: одновременно заполнены только
-/// те, что соответствуют конкретному типу сообщения (текст, медиа, служебное событие
-/// и т. п.). Чтобы определить тип сообщения, проверяйте, какое из полей не равно
-/// <c>null</c>.
-/// <para/>
-/// Внимание: данная модель содержит лишь часть полей, описанных в официальной
-/// документации. По мере необходимости остальные поля могут быть добавлены.
+/// Тип сообщения определяется тем, какое из необязательных полей не равно <c>null</c>.
+/// В модели покрыта только часть полей официальной спецификации.
 /// </remarks>
-/// <param name="MessageId">
-/// Уникальный идентификатор сообщения внутри чата.
-/// В супергруппах и каналах идентификаторы возрастают монотонно,
-/// но между разными чатами не сравнимы.
-/// </param>
-/// <param name="MessageThreadId">
-/// Идентификатор треда (топика) форума, к которому относится сообщение.
-/// Присутствует только для сообщений в супергруппах с включёнными темами.
-/// </param>
-/// <param name="From">
-/// Отправитель сообщения. Может быть <c>null</c> для сообщений в каналах
-/// и автоматических пересылок из связанных каналов.
-/// </param>
-/// <param name="SenderChat">
-/// Чат, от имени которого отправлено сообщение
-/// (анонимный администратор группы, канал, привязанный к супергруппе, и т. п.).
-/// </param>
-/// <param name="SenderBoostCount">
-/// Количество бустов, которые отправитель добавил чату.
-/// Заполняется, если отправитель буст-нул чат.
-/// </param>
-/// <param name="SenderBusinessBot">
-/// Бот, через которого было отправлено сообщение от имени бизнес-аккаунта.
-/// </param>
-/// <param name="Date">
-/// Дата отправки сообщения в Unix-времени (секунды с эпохи).
-/// </param>
-/// <param name="BusinessConnectionId">
-/// Идентификатор бизнес-подключения, в рамках которого отправлено сообщение.
-/// </param>
-/// <param name="Chat">
-/// Чат, в котором находится сообщение. Обязательное поле.
-/// </param>
-/// <param name="IsTopicMessage">
-/// <c>true</c>, если сообщение принадлежит топику форума.
-/// </param>
-/// <param name="IsAutomaticForward">
-/// <c>true</c>, если сообщение является автоматической пересылкой
-/// из связанного канала в дискуссионную группу.
-/// </param>
-/// <param name="ReplyToMessage">
-/// Сообщение, на которое отвечает текущее. Telegram не включает рекурсивно
-/// поле <see cref="ReplyToMessage"/> у этого вложенного объекта,
-/// чтобы избежать неограниченной вложенности.
-/// </param>
-/// <param name="Quote">
-/// Цитируемый фрагмент исходного сообщения. Может присутствовать,
-/// даже если <see cref="ReplyToMessage"/> также заполнено.
-/// </param>
-/// <param name="PinnedMessage">
-/// Сообщение, закреплённое в чате. Заполняется для служебных сообщений
-/// о закреплении (то есть когда текущее сообщение — это уведомление о пине).
-/// </param>
-/// <param name="Text">
-/// Текст сообщения (UTF-8). Для текстовых сообщений — до 4096 символов.
-/// </param>
-/// <param name="Entities">
-/// Специальные сущности в тексте сообщения — упоминания, хэштеги, URL,
-/// форматирование и т. п. Заполняется только для текстовых сообщений
-/// и только если такие сущности присутствуют. Соответствует полю
-/// <c>entities</c> в Telegram Bot API; элементы массива описаны
-/// типом <see cref="MessageEntity"/>.
-/// </param>
-/// <param name="Poll">
-/// Опрос, содержащийся в сообщении. Заполняется только для сообщений,
-/// отправленных методом <c>sendPoll</c> (или пришедших в чат как опрос) —
-/// у обычных текстовых сообщений и медиа поле <c>null</c>. Через это поле
-/// доступен серверный <see cref="Models.Poll.Id"/>, необходимый для
-/// подписки на <c>poll</c>/<c>poll_answer</c>-апдейты.
-/// </param>
+/// <param name="MessageId">Идентификатор сообщения внутри чата.</param>
+/// <param name="MessageThreadId">Идентификатор треда форума (только для супергрупп с темами).</param>
+/// <param name="From">Отправитель. <c>null</c> для сообщений в каналах и авто-пересылок.</param>
+/// <param name="SenderChat">Чат-отправитель (анонимный админ, канал и т. п.).</param>
+/// <param name="SenderBoostCount">Число бустов, которые отправитель добавил чату.</param>
+/// <param name="SenderBusinessBot">Бот, через которого сообщение отправлено от имени бизнес-аккаунта.</param>
+/// <param name="Date">Дата отправки, Unix-timestamp.</param>
+/// <param name="BusinessConnectionId">Идентификатор бизнес-подключения.</param>
+/// <param name="Chat">Чат, в котором находится сообщение.</param>
+/// <param name="IsTopicMessage"><c>true</c>, если сообщение в топике форума.</param>
+/// <param name="IsAutomaticForward"><c>true</c> для автопересылок из связанного канала в дискуссионную группу.</param>
+/// <param name="ReplyToMessage">Сообщение-цель ответа (без рекурсивного вложения).</param>
+/// <param name="Quote">Цитируемый фрагмент исходного сообщения.</param>
+/// <param name="PinnedMessage">Закреплённое сообщение (для служебных уведомлений о пине).</param>
+/// <param name="Text">Текст сообщения, до 4096 символов.</param>
+/// <param name="Entities">Спецсущности в тексте: упоминания, ссылки, форматирование.</param>
+/// <param name="Poll">Опрос в сообщении (для сообщений типа poll).</param>
 public record Message(
     [property: JsonPropertyName("message_id")]
     int MessageId,
@@ -140,56 +80,27 @@ public record Message(
 );
 
 /// <summary>
-/// Представляет специальную сущность внутри текста сообщения —
-/// упоминание, хэштег, ссылку, форматирование и т. п.
-/// (см. <see href="https://core.telegram.org/bots/api#messageentity"/>).
+/// Спецсущность в тексте сообщения — упоминание, ссылка, форматирование
+/// (<see href="https://core.telegram.org/bots/api#messageentity"/>).
 /// </summary>
 /// <remarks>
-/// Сущность описывает диапазон символов исходного текста и его тип.
-/// Важно: <see cref="Offset"/> и <see cref="Length"/> измеряются в
-/// <b>UTF-16 code units</b>, а не в Unicode-кодовых точках. Это означает,
-/// что эмодзи и символы вне BMP занимают по 2 единицы. В .NET строки уже
-/// хранятся в UTF-16, поэтому <c>text.Substring(offset, length)</c> вернёт
-/// корректную подстроку без дополнительных пересчётов.
-/// <para/>
-/// Большинство полей кроме <see cref="Type"/>, <see cref="Offset"/> и
-/// <see cref="Length"/> относятся только к конкретному значению <see cref="Type"/>:
-/// <list type="bullet">
-///   <item><description><see cref="Url"/> — только для <c>text_link</c>.</description></item>
-///   <item><description><see cref="User"/> — только для <c>text_mention</c>.</description></item>
-///   <item><description><see cref="Language"/> — только для <c>pre</c>.</description></item>
-///   <item><description><see cref="CustomEmojiId"/> — только для <c>custom_emoji</c>.</description></item>
-/// </list>
+/// <see cref="Offset"/> и <see cref="Length"/> измеряются в <b>UTF-16 code units</b>
+/// (эмодзи и символы вне BMP занимают по 2 единицы). В .NET строки уже в UTF-16,
+/// поэтому <c>text.Substring(offset, length)</c> работает без пересчётов.
 /// </remarks>
 /// <param name="Type">
-/// Тип сущности. Возможные значения: <c>mention</c> (<c>@username</c>),
-/// <c>hashtag</c>, <c>cashtag</c>, <c>bot_command</c>, <c>url</c>, <c>email</c>,
-/// <c>phone_number</c>, <c>bold</c>, <c>italic</c>, <c>underline</c>,
-/// <c>strikethrough</c>, <c>spoiler</c>, <c>blockquote</c>,
+/// Тип сущности: <c>mention</c>, <c>hashtag</c>, <c>cashtag</c>, <c>bot_command</c>,
+/// <c>url</c>, <c>email</c>, <c>phone_number</c>, <c>bold</c>, <c>italic</c>,
+/// <c>underline</c>, <c>strikethrough</c>, <c>spoiler</c>, <c>blockquote</c>,
 /// <c>expandable_blockquote</c>, <c>code</c>, <c>pre</c>, <c>text_link</c>,
 /// <c>text_mention</c>, <c>custom_emoji</c>.
 /// </param>
-/// <param name="Offset">
-/// Смещение в UTF-16 code units от начала текста до начала сущности.
-/// </param>
-/// <param name="Length">
-/// Длина сущности в UTF-16 code units.
-/// </param>
-/// <param name="Url">
-/// URL, открываемый при нажатии. Заполняется только для <c>text_link</c>.
-/// </param>
-/// <param name="User">
-/// Упомянутый пользователь. Заполняется только для <c>text_mention</c>
-/// (упоминание пользователя без <c>@username</c>).
-/// </param>
-/// <param name="Language">
-/// Язык программирования для блока кода. Заполняется только для <c>pre</c>.
-/// </param>
-/// <param name="CustomEmojiId">
-/// Уникальный идентификатор кастомного эмодзи-стикера.
-/// Заполняется только для <c>custom_emoji</c>; получить сам стикер можно
-/// через метод <c>getCustomEmojiStickers</c>.
-/// </param>
+/// <param name="Offset">Смещение от начала текста в UTF-16 code units.</param>
+/// <param name="Length">Длина сущности в UTF-16 code units.</param>
+/// <param name="Url">URL для <c>text_link</c>.</param>
+/// <param name="User">Упомянутый пользователь для <c>text_mention</c>.</param>
+/// <param name="Language">Язык программирования для <c>pre</c>.</param>
+/// <param name="CustomEmojiId">Идентификатор кастомного эмодзи для <c>custom_emoji</c>.</param>
 public record MessageEntity(
     [property: JsonPropertyName("type")]
     string Type,

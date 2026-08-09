@@ -1,26 +1,20 @@
 namespace Telebot;
 
 /// <summary>
-/// Параметры вызова метода <c>sendPhoto</c> — отправка фотографии в чат.
-/// В отличие от <see cref="SendMessageRequestParams"/>, помимо скалярных полей
-/// передаёт ещё и файл-фото (<see cref="Photo"/>), поэтому переопределяет
-/// и <see cref="GetRequestFields"/>, и <see cref="GetRequestFiles"/>.
+/// Параметры <c>sendPhoto</c> — отправка фотографии.
 /// </summary>
 /// <param name="ChatId">Идентификатор чата-получателя.</param>
 /// <param name="Photo">
-/// Источник фотографии: <see cref="InputFileWithId"/>, <see cref="InputFileWithUrl"/>
-/// или <see cref="InputFileWithStream"/>. От выбранного варианта зависит,
-/// будет ли использоваться multipart-транспорт.
+/// Источник фото: <see cref="InputFileWithId"/>, <see cref="InputFileWithUrl"/>
+/// или <see cref="InputFileWithStream"/>. При потоке транспорт использует multipart.
 /// </param>
-/// <param name="Caption">Подпись к фото, до 1024 символов.</param>
+/// <param name="Caption">Подпись, до 1024 символов.</param>
 /// <param name="ParseMode">Режим разбора разметки в <see cref="Caption"/>.</param>
-/// <param name="HasSpoiler">Если <c>true</c>, изображение придёт с эффектом «спойлер».</param>
+/// <param name="HasSpoiler">Эффект «спойлер» на изображении.</param>
 /// <param name="DisableNotification">Отправка без звука.</param>
-/// <param name="ProtectContent">Запрет на пересылку и сохранение.</param>
-/// <param name="ReplyToMessageId">Идентификатор сообщения, на которое отвечаем.</param>
-/// <param name="AllowSendingWithoutReply">
-/// Разрешает отправку, даже если цель ответа удалена.
-/// </param>
+/// <param name="ProtectContent">Запрет пересылки и сохранения.</param>
+/// <param name="ReplyToMessageId">Идентификатор сообщения-цели ответа.</param>
+/// <param name="AllowSendingWithoutReply">Отправлять, даже если цель ответа удалена.</param>
 public sealed record SendPhotoRequestParams(
     long ChatId,
     InputFile Photo,
@@ -33,11 +27,7 @@ public sealed record SendPhotoRequestParams(
     bool? AllowSendingWithoutReply = null
 ) : TelegramRequest("sendPhoto")
 {
-    /// <summary>
-    /// Возвращает скалярные параметры. Сам файл <see cref="Photo"/> в этот
-    /// набор не входит — он попадает в <see cref="GetRequestFiles"/>,
-    /// откуда транспорт решит, как его кодировать.
-    /// </summary>
+    /// <inheritdoc />
     public override IEnumerable<TelegramRequestField> GetRequestFields()
     {
         yield return new TelegramRequestField("chat_id", ChatId.ToString());
@@ -79,12 +69,7 @@ public sealed record SendPhotoRequestParams(
             );
     }
 
-    /// <summary>
-    /// Возвращает единственный файл с именем поля <c>photo</c> — именно так
-    /// этот параметр ожидает Telegram Bot API. Если <see cref="Photo"/> является
-    /// <see cref="InputFileWithStream"/>, транспорт автоматически выберет
-    /// multipart-кодирование.
-    /// </summary>
+    /// <inheritdoc />
     public override IEnumerable<TelegramRequestFile> GetRequestFiles()
     {
         yield return new TelegramRequestFile("photo", Photo);

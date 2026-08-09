@@ -5,45 +5,24 @@ namespace Telebot;
 
 /// <summary>
 /// Кнопка обычной (reply) клавиатуры
-/// (см. <see href="https://core.telegram.org/bots/api#keyboardbutton"/>).
+/// (<see href="https://core.telegram.org/bots/api#keyboardbutton"/>).
+/// Покрыт минимум — только текстовая кнопка.
 /// </summary>
-/// <remarks>
-/// В полной спецификации у <c>KeyboardButton</c> есть ещё поля request_contact,
-/// request_location, request_poll и т.п. Здесь оставлен минимум — только текст.
-/// </remarks>
-/// <param name="Text">
-/// Текст на кнопке. Нажатие отправит в чат сообщение с этим же текстом.
-/// </param>
+/// <param name="Text">Текст на кнопке. При нажатии отправляется как сообщение.</param>
 public sealed record KeyboardButton(
     [property: JsonPropertyName("text")] string Text
 );
 
 /// <summary>
 /// Обычная (не инлайновая) клавиатура, заменяющая клавиатуру устройства
-/// (см. <see href="https://core.telegram.org/bots/api#replykeyboardmarkup"/>).
+/// (<see href="https://core.telegram.org/bots/api#replykeyboardmarkup"/>).
 /// </summary>
-/// <param name="Keyboard">
-/// Двумерный массив кнопок: внешний уровень — ряды, внутренний — кнопки в ряду.
-/// Наличие поля <c>keyboard</c> в JSON — маркер, по которому Telegram
-/// распознаёт этот тип разметки.
-/// </param>
-/// <param name="IsPersistent">
-/// Если <c>true</c>, клавиатура остаётся видимой даже когда стандартная
-/// клавиатура ввода была бы скрыта.
-/// </param>
-/// <param name="ResizeKeyboard">
-/// Если <c>true</c>, клиент Telegram уменьшит высоту клавиатуры до необходимой.
-/// </param>
-/// <param name="OneTimeKeyboard">
-/// Если <c>true</c>, клавиатура скроется сразу после первого нажатия.
-/// </param>
-/// <param name="InputFieldPlaceholder">
-/// Placeholder в поле ввода, пока клавиатура активна, 1–64 символа.
-/// </param>
-/// <param name="Selective">
-/// Если <c>true</c>, клавиатура покажется только упомянутым в тексте
-/// пользователям и/или автору сообщения, на которое отвечает бот.
-/// </param>
+/// <param name="Keyboard">Ряды кнопок: внешний уровень — ряды, внутренний — кнопки в ряду.</param>
+/// <param name="IsPersistent">Держать клавиатуру видимой всегда.</param>
+/// <param name="ResizeKeyboard">Уменьшить высоту клавиатуры до необходимой.</param>
+/// <param name="OneTimeKeyboard">Скрыть клавиатуру после первого нажатия.</param>
+/// <param name="InputFieldPlaceholder">Placeholder поля ввода, 1–64 символа.</param>
+/// <param name="Selective">Показать клавиатуру только упомянутым пользователям / автору reply-цели.</param>
 public sealed record ReplyKeyboardMarkup(
     [property: JsonPropertyName("keyboard")]
     IReadOnlyList<IReadOnlyList<KeyboardButton>> Keyboard,
