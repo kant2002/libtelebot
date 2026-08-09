@@ -129,6 +129,15 @@ public interface ITelegramClient
     /// </summary>
     Task<Poll> StopPollAsync(StopPollRequestParams requestParams,
         CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Вызывает метод <c>getFile</c> — возвращает метаданные файла по его
+    /// <c>file_id</c>. Сам бинарник этот метод <b>не</b> отдаёт: скачивание
+    /// делается отдельным HTTP-запросом по URL, собранному из
+    /// <see cref="Telebot.Models.File.FilePath"/>.
+    /// </summary>
+    Task<Models.File> GetFileAsync(GetFileRequestParams requestParams,
+        CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -261,5 +270,12 @@ public sealed class Telegram : ITelegramClient
         CancellationToken cancellationToken)
     {
         return await _transport.RequestAsync<Poll>(requestParams, _token, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<Models.File> GetFileAsync(GetFileRequestParams requestParams,
+        CancellationToken cancellationToken)
+    {
+        return await _transport.RequestAsync<Models.File>(requestParams, _token, cancellationToken);
     }
 }
