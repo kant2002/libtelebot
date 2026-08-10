@@ -25,6 +25,9 @@ namespace Telebot.Models;
 /// <param name="PinnedMessage">Закреплённое сообщение (для служебных уведомлений о пине).</param>
 /// <param name="Text">Текст сообщения, до 4096 символов.</param>
 /// <param name="Entities">Спецсущности в тексте: упоминания, ссылки, форматирование.</param>
+/// <param name="Photo">
+/// Фото в разных размерах (для сообщений с фото). Последний элемент — самый крупный.
+/// </param>
 /// <param name="Poll">Опрос в сообщении (для сообщений типа poll).</param>
 public record Message(
     [property: JsonPropertyName("message_id")]
@@ -74,6 +77,9 @@ public record Message(
 
     [property: JsonPropertyName("entities")]
     MessageEntity[]? Entities,
+
+    [property: JsonPropertyName("photo")]
+    PhotoSize[]? Photo = null,
 
     [property: JsonPropertyName("poll")]
     Poll? Poll = null
