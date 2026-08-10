@@ -1,27 +1,17 @@
 namespace Telebot;
 
 /// <summary>
-/// Общий контракт для всех вариантов поля <c>reply_markup</c> в методах отправки
-/// сообщений (см. <see href="https://core.telegram.org/bots/api#sendmessage"/>).
+/// Общий интерфейс для всех вариантов <c>reply_markup</c>:
+/// <see cref="InlineKeyboardMarkup"/>, <see cref="ReplyKeyboardMarkup"/>,
+/// <see cref="ReplyKeyboardRemove"/>, <see cref="ForceReply"/>.
 /// </summary>
 /// <remarks>
-/// В Bot API <c>reply_markup</c> — это единый параметр, принимающий один из
-/// четырёх типов (<see cref="InlineKeyboardMarkup"/>, <see cref="ReplyKeyboardMarkup"/>,
-/// <see cref="ReplyKeyboardRemove"/>, <see cref="ForceReply"/>), а Telegram различает
-/// их по наличию «маркерных» полей (<c>inline_keyboard</c>, <c>keyboard</c>,
-/// <c>remove_keyboard</c>, <c>force_reply</c>). Явного тега нет — union без тега.
-/// <para/>
-/// Поэтому в C# мы отдаём наружу общий интерфейс с одним методом
-/// <see cref="ToJson"/>: каждая реализация сама знает, как выглядит её
-/// JSON-представление, а запрос-отправитель просто вкладывает результат
-/// в поле формы <c>reply_markup</c>.
+/// В Bot API <c>reply_markup</c> — union без тега; Telegram различает варианты
+/// по «маркерным» полям (<c>inline_keyboard</c>, <c>keyboard</c>, <c>remove_keyboard</c>,
+/// <c>force_reply</c>). Каждая реализация сама знает своё JSON-представление.
 /// </remarks>
 public interface IReplyMarkup
 {
-    /// <summary>
-    /// Возвращает готовую JSON-строку в том виде, в котором её ожидает Telegram
-    /// в поле формы <c>reply_markup</c>. Реализация обязана включить своё
-    /// маркерное поле — без него Telegram не сможет распознать тип разметки.
-    /// </summary>
+    /// <summary>Возвращает JSON-строку для поля формы <c>reply_markup</c>.</summary>
     string ToJson();
 }
