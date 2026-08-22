@@ -14,5 +14,13 @@
     <Company>Bucketlab</Company>
     <Description>Библиотека клиент для телеграм</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <IsAotCompatible>false</IsAotCompatible>
+    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- Список проблем с АОТ которые надо решить чтобы 
+    	можно было включить АОТ совместимость библиотеки
+        через IsAotCompatible -->
+    <NoWarn>$(NoWarn);IL3050</NoWarn>
   </PropertyGroup>
 </Project>
