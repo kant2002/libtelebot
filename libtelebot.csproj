@@ -15,8 +15,7 @@
     <Description>Библиотека клиент для телеграм</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
-    <IsAotCompatible>false</IsAotCompatible>
-    <EnableAotAnalyzer>true</EnableAotAnalyzer>
+    <IsAotCompatible>true</IsAotCompatible>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 </Project>
